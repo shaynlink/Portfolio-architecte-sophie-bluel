@@ -14,6 +14,14 @@ loginBtn.addEventListener('click', (evt) => {
     const { value: email } = document.querySelector('#email');
     const { value: password } = document.querySelector('#password');
 
+    if (!email) {
+        return void showError('Vous devez renseigner votre addresse mail');
+    }
+
+    if (!password) {
+        return void showError('Vous devez renseigner votre mot de passe');
+    }
+
     fetch(makeUrl('/users/login'), {
         method: 'POST',
         body: JSON.stringify({ email, password }),
@@ -21,7 +29,7 @@ loginBtn.addEventListener('click', (evt) => {
     })
         .then(async (res) => await res.json())
         .then((data) => {
-            if (data.message == 'user not found') {
+            if (data.message == 'user not found' || 'error' in data) {
                 showError('Erreur dans l\'identifiant ou le mot de passe');
                 return;
             }
